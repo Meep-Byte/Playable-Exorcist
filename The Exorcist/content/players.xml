@@ -1,0 +1,16 @@
+<players root = "gfx/characters/costumes/" portraitroot = "gfx/ui/stage/" nameimageroot = "gfx/ui/boss/">
+<player name = "Exorcist"
+   skin = "character_exorcist.png"
+   nameimage = "playername_exorcist.png"
+   hp = "2"
+   armor = "2"
+   bombs = "1"
+   portrait = "playerportrait_exorcist.png"
+   skincolor = "-1"
+   items = "634"
+   trinket = "173"
+   costumeSuffix = "Exorcist"
+/>
+
+
+</players>

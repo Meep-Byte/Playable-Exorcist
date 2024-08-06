@@ -1,0 +1,4 @@
+<entities anm2root = "gfx/" version = "5">
+<entity anm2path = "pickups/rottenkey/rottenkey.anm2" baseHP = "0" id = "5" variant = "30" subtype = "237" name = "Rotten Key" friction = "1" numGridCollisionPoints = "12"
+collisionRadius = "13" champion = "0" friction = "1" stageHP = "0" boss = "0"/>
+</entities>
