@@ -1,12 +1,12 @@
 <items gfxroot = "gfx/items/" version = "1">
-<active id = "0" name = "Magnum Opus" description = "A riveting read" gfx = "magnumopus.png" maxcharges = "140" chargetype = "timed" quality = "3" tags = "book"/>
-<active id = "1" name = "Tome of Blight" description = "Unlock its power" gfx = "fleshytome.png" maxcharges = "6" quality = "2" tags = "book"/>
+<active id = "0" name = "Magnum Opus" description = "A riveting read" gfx = "magnumopus.png" maxcharges = "140" chargetype = "timed" quality = "3" tags = "book" acheivement = "Magnum Opus"/>
+<active id = "1" name = "Tome of Blight" description = "Unlock its power" gfx = "fleshytome.png" maxcharges = "6" quality = "2" tags = "book" acheivement = "Tome of Blight"/>
 <active id = "2" name = "The Scourgetome" description = "What have you done?" gfx = "scourgetome.png" maxcharges = "2" quality = "2"/>
-<passive id = "3" name = "Purple Candle" description = "Mausoleum's power" gfx = "purplecandle.png" quality = "3" cache = "flying"/>
-<passive id = "4" name = "DIY Taxidermy Kit" description = "You feel stuffed" gfx = "taxidermykit.png" quality = "3"/>
-<passive id = "5" name = "Tainted Grail" description = "It's consuming me..." gfx = "taintedgrail.png" quality = "3"/>
-<passive id = "6" name = "Heart of Heresy" description = "Proximity = suffering" gfx = "hereticheart.png" quality = "2"/>
-<passive id = "7" name = "Remains of Heresy" description = "The weakened wither" gfx = "hereticremains.png" quality = "2"/>
-<passive id = "8" name = "Mind of Heresy" description = "Death brings knowledge" gfx = "hereticmind.png" quality = "2"/>
-<passive id = "9" name = "Chains of Chastity" description = "Your vices must not rule" gfx = "chainsofchastity.png" quality = "3" cache = "speed"/>
+<passive id = "3" name = "Purple Candle" description = "Mausoleum's power" gfx = "purplecandle.png" quality = "3" cache = "flying" acheivement = "Purple Candle"/>
+<passive id = "4" name = "DIY Taxidermy Kit" description = "You feel stuffed" gfx = "taxidermykit.png" quality = "3" acheivement = "DIY Taxidermy Kit"/>
+<passive id = "5" name = "Tainted Grail" description = "It's consuming me..." gfx = "taintedgrail.png" quality = "3" acheivement = "Tainted Grail"/>
+<passive id = "6" name = "Heart of Heresy" description = "Proximity = suffering" gfx = "hereticheart.png" quality = "2" acheivement = "Remnants of heresy"/>
+<passive id = "7" name = "Remains of Heresy" description = "The weakened wither" gfx = "hereticremains.png" quality = "2" acheivement = "Remnants of heresy"/>
+<passive id = "8" name = "Mind of Heresy" description = "Death brings knowledge" gfx = "hereticmind.png" quality = "2" acheivement = "Remnants of heresy"/>
+<passive id = "9" name = "Chains of Chastity" description = "Your vices must not rule" gfx = "chainsofchastity.png" quality = "3" cache = "speed" acheivement = "Remnants of heresy"/>
 </items>

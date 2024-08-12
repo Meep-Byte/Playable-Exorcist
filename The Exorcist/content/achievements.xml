@@ -1,0 +1,10 @@
+<acheivements gfxroot = "gfx/ui/acheivements/">
+<acheivement name = "Magnum Opus" gfxback = "paper.png" id = "1" gfx = "magnumopusunlock.png" text = "Tome of the occult."/>
+<acheivement name = "Tome of Blight" gfxback = "paper.png" id = "2" gfx = "tomeofblightunlock.png" text = "Tome of the scourge."/>
+<acheivement name = "Purple Candle" gfxback = "paper.png" id = "3" gfx = "purplecandleunlock.png" text = "It's purple, not green."/>
+<acheivement name = "DIY Taxidermy Kit" gfxback = "paper.png" id = "4" gfx = "taxidermyKitUnlock.png" text = "Stuffed."/>
+<acheivement name = "Tainted Grail" gfxback = "paper.png" id = "5" gfx = "taintedgrailunlock.png" text = "Ravenous."/>
+<acheivement name = "Remnants of heresy" gfxback = "paper.png" id = "6" gfx = "remnantsunlock.png" text = "Mind, Body and Soul."/>
+<acheivement name = "Chains of Chastity" gfxback = "paper.png" id = "6" gfx = "chainsunlock.png" text = "Freaky"/>
+
+</acheivements>

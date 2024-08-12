@@ -15,6 +15,30 @@ local MIND_OF_HERESY = Isaac.GetItemIdByName("Mind of Heresy")
 local CHAINS_OF_CHASTITY = Isaac.GetItemIdByName("Chains of Chastity")
 local LUST_COSTUME = Isaac.GetCostumeIdByPath("gfx/characters/chainsofchastity_broken.anm2")
 local sound = SFXManager()
+local timeoutConstant = 160
+
+function exorcistMod:toTearsPerSecond(fireDelay)
+    return 30/(fireDelay +1)
+end
+
+function exorcistMod:toFireDelay(tearsPerSecond)
+    return (30 / tearsPerSecond -1)
+end
+
+function exorcistMod:closestEntity(argumentEntity)
+    local closestDistanceSoFar = 10000
+    local closestEntity = nil
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+        if entity ~= argumentEntity and entity:IsActiveEnemy(false) and entity.Type ~= EntityType.ENTITY_EFFECT then
+        local distance = argumentEntity.Position:Distance(entity.Position)
+        if  distance < closestDistanceSoFar then
+            closestDistanceSoFar = distance
+            closestEntity = entity
+        end
+        end
+    end
+    return closestEntity
+end
 
 --Gives the exorcist Magnum Opus as his pocket active
 function exorcistMod:exorcistInit(player)
@@ -33,7 +57,9 @@ function exorcistMod: applyExorcistStats(player, CacheFlag)
    if player:GetPlayerType() ~= ExorcistType then
    return
    else
-   player.MaxFireDelay = player.MaxFireDelay - 1.25
+   local tps = exorcistMod:toTearsPerSecond(player.MaxFireDelay)
+   tps = tps - 1.25
+   player.MaxFireDelay = exorcistMod:toFireDelay(tps)
    end
 end
 exorcistMod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, exorcistMod.applyExorcistStats, CacheFlag.CACHE_FIREDELAY)
@@ -306,8 +332,11 @@ function exorcistMod:hereticHeartPassive(player)
                 return
             else if player.Position:Distance(entity.Position) <= 50 then
              entity:AddEntityFlags(EntityFlag.FLAG_WEAKNESS)
+            else if player:HasCollectible(REMAINS_OF_HERESY) then
+            return
             else
             entity:ClearEntityFlags(EntityFlag.FLAG_WEAKNESS)
+            end
             end
         end
     end
@@ -612,6 +641,120 @@ function exorcistMod:MagnumOpusSynergies(soul)
                 end
             end
         end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
+            local level = game:GetLevel()
+            local room = level:GetCurrentRoom()
+            local sprite = soul:GetSprite()
+            local soulPos = soul.Position
+            if sprite:IsFinished("Die") then
+                if room:IsClear() then
+                    return
+                else
+                    local bomb = player:FireBomb(soulPos, Vector.Zero, soul)
+                end
+            end
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+            local soulPos = soul.Position
+            local soulData = soul:GetData()
+            local soulSprite = soul:GetSprite()
+            if soulSprite:IsFinished("Die") then
+            return
+            else
+            if soulData.iJustShitMyPants == nil then soulData.iJustShitMyPants = true
+            local bomb = Isaac.Spawn(EntityType.ENTITY_BOMB, BombVariant.BOMB_ROCKET, 0, soulPos, Vector.Zero, soul)
+            bomb.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NOPITS
+            bomb.Parent = soul
+            soul.Child = bomb
+            end
+            if soul.Child == nil then
+            soul.PositionOffset = Vector(0,0)
+            end
+           end
+        end
+       
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_OCULAR_RIFT) then
+            local randomnum = math.random(4)
+            local soulSprite = soul:GetSprite()
+            local soulpos = soul.Position
+            if soulSprite:IsFinished("Die") then
+                if randomnum == 1 then
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RIFT, 0, soulpos, Vector.Zero, soul)
+                end
+            end
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_KNOCKOUT_DROPS) then
+            local soulPos = soul.Position
+            if soul.FrameCount % 60 == 0 then
+                local entity = exorcistMod:closestEntity(soul)
+                if entity ~= nil then
+                local entityPos = entity.Position
+                local velocity = Vector(soulPos.X - entityPos.X, soulPos.Y - entityPos.Y):Normalized() * -1
+                velocity = velocity * 15
+                local tear = player:FireTear(soulPos, velocity, false, true, false, soul, 0.3)
+                tear:AddTearFlags(TearFlags.TEAR_KNOCKBACK)
+                end
+            end
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRDS_EYE) then
+            local sprite = soul:GetSprite()
+            local soulPos = soul.Position
+            if sprite:IsFinished("Die") then
+                local fire = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME,0, soulPos, Vector(1,0)*12, soul)
+                fire.CollisionDamage = 10
+                local fire2 = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME,0, soulPos, Vector(0,1)*12, soul)
+                fire2.CollisionDamage = 10
+                local fire3 = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME,0, soulPos, Vector(0,-1)*12, soul)
+                fire3.CollisionDamage = 10
+                local fire4 = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME,0, soulPos, Vector(-1,0)*12, soul)
+                fire4.CollisionDamage = 10
+            end
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_GHOST_PEPPER) then
+            local sprite = soul:GetSprite()
+            local soulPos = soul.Position
+            if sprite:IsFinished("Die") then
+                local fire = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, soulPos, Vector(1,1)*12, soul)
+                local fireEffect = fire:ToEffect()
+                if fireEffect~= nil then fireEffect:SetTimeout(timeoutConstant) end
+                fire.CollisionDamage = 10
+                fire.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NONE
+                local firedata = fire:GetData()
+                if firedata.HasBeenInitialized == nil then firedata.HasBeenInitialized = true end
+                local fire2 = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, soulPos, Vector(-1,1)*12, soul)
+                fire2.CollisionDamage = 10
+                fire2.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NONE
+                local fire2data = fire2:GetData()
+                if fire2data.HasBeenInitialized == nil then fire2data.HasBeenInitialized = true end
+                local fire2Effect = fire2:ToEffect()
+                if fire2Effect~= nil then fire2Effect:SetTimeout(timeoutConstant) end
+                local fire3 = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, soulPos, Vector(1,-1)*12, soul)
+                fire3.CollisionDamage = 10
+                fire3.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NONE
+                local fire3data = fire3:GetData()
+                if fire3data.HasBeenInitialized == nil then fire3data.HasBeenInitialized = true end
+                local fire3Effect = fire3:ToEffect()
+                if fire3Effect~= nil then fire3Effect:SetTimeout(timeoutConstant) end
+                local fire4 = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, soulPos, Vector(-1,-1)*12, soul)
+                fire4.CollisionDamage = 10
+                fire4.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NONE
+                local fire4data = fire4:GetData()
+                if fire4data.HasBeenInitialized == nil then fire4data.HasBeenInitialized = true end
+                local fire4Effect = fire4:ToEffect()
+                if fire4Effect~= nil then fire4Effect:SetTimeout(timeoutConstant) end
+            end
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_LUMP_OF_COAL) then
+            soul.SpriteScale = Vector(1,1) * math.min(2, math.max(1, soul.FrameCount/60))
+            soul.CollisionDamage = soul.CollisionDamage * math.max(1, soul.FrameCount/8)
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_LOST_CONTACT) then
+            local soulPos = soul.Position
+            local entityList = Isaac.FindInRadius(soulPos, 20, 1<<1)
+            for _, entity in ipairs(entityList) do
+                entity:Remove()
+            end
+        end
         break
     end
 
@@ -661,3 +804,24 @@ function exorcistMod:knifeUpdate(knife)
     end
 end
 exorcistMod:AddCallback(ModCallbacks.MC_POST_KNIFE_UPDATE, exorcistMod.knifeUpdate)
+function exorcistMod:bombUpdate(rocket)
+   local soul = rocket.Parent
+   if soul.Type == EntityType.ENTITY_EFFECT and soul.Variant == EffectVariant.HUNGRY_SOUL then
+    soul.PositionOffset = Vector(0,-10)
+    soul.Velocity = soul.Velocity * 1.5
+    local angle = soul.Velocity:GetAngleDegrees()
+    local rocketSprite = rocket:GetSprite()
+    rocketSprite.Rotation = angle
+    rocket.Velocity = soul.Velocity
+    rocket.Position = soul.Position
+   end
+end
+exorcistMod:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, exorcistMod.bombUpdate, BombVariant.BOMB_ROCKET)
+
+function exorcistMod:blueFireUpdate(fire)
+    local fireData = fire:GetData()
+    if fireData.HasBeenInitialized ~= nil then
+        fire.SpriteScale = fire.SpriteScale/math.max(1, fire.FrameCount/7)
+    end
+end
+exorcistMod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, exorcistMod.blueFireUpdate, EffectVariant.BLUE_FLAME)
