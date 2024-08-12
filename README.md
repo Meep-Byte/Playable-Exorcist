@@ -1,1 +1,1 @@
-This is simple git repo for my isaac mod.
+This is simple git repo for the Playable Exorcist MOD.
