@@ -7,9 +7,9 @@
    bombs = "1"
    portrait = "playerportrait_exorcist.png"
    skincolor = "-1"
-   items = "634"
    trinket = "173"
    costumeSuffix = "Exorcist"
+   birthright = "In his favor"
 />
 
 

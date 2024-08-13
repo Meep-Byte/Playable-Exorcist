@@ -825,3 +825,36 @@ function exorcistMod:blueFireUpdate(fire)
     end
 end
 exorcistMod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, exorcistMod.blueFireUpdate, EffectVariant.BLUE_FLAME)
+
+function exorcistMod:addPurgatory(monster)
+    for i = 1, game:GetNumPlayers() do
+        local player = Isaac.GetPlayer(i-1)
+        print ("runs!")
+        if player:GetPlayerType() == ExorcistType then
+            if monster:IsActiveEnemy(true) then
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+                local randomNum = math.random(0,20)
+                if randomNum >= math.max(1, (2*player.Luck)) then
+            local monsterPos = monster.Position
+            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PURGATORY, 0, monsterPos, Vector.Zero, player)
+            print("It Runs!")
+            end
+            end
+        end
+        end
+    end
+end
+exorcistMod:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, exorcistMod.addPurgatory)
+
+function exorcistMod:birthRightPassive(tear)
+    local player = tear.SpawnerEntity:ToPlayer()
+    if player:GetPlayerType() ~= ExorcistType then
+        return
+    else
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+        tear:AddTearFlags(TearFlags.TEAR_HOMING)
+    end
+    tear:SetColor(Color(1.0, 1.0, 1.0, 1.0, 128, 0, 128), 500, 1, false, false)
+    end
+end
+exorcistMod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, exorcistMod.birthRightPassive)
