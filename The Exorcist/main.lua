@@ -17,11 +17,11 @@ local LUST_COSTUME = Isaac.GetCostumeIdByPath("gfx/characters/chainsofchastity_b
 local sound = SFXManager()
 local timeoutConstant = 160
 
-function exorcistMod:toTearsPerSecond(fireDelay)
+local function toTearsPerSecond(fireDelay)
     return 30/(fireDelay +1)
 end
 
-function exorcistMod:toFireDelay(tearsPerSecond)
+local function toFireDelay(tearsPerSecond)
     return (30 / tearsPerSecond -1)
 end
 
@@ -57,11 +57,11 @@ function exorcistMod: applyExorcistStats(player, CacheFlag)
    if player:GetPlayerType() ~= ExorcistType then
    return
    else
-   local tps = exorcistMod:toTearsPerSecond(player.MaxFireDelay)
-   tps = tps - 1.25
-   player.MaxFireDelay = exorcistMod:toFireDelay(tps)
-   end
+   
+    player.MaxFireDelay = player.MaxFireDelay + 8
 end
+end
+
 exorcistMod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, exorcistMod.applyExorcistStats, CacheFlag.CACHE_FIREDELAY)
 -- spawns ghosts on enemy kill if holding mangum opus
 function exorcistMod:magnumOpusPassive(player)
